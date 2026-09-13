@@ -95,3 +95,19 @@ Tests that assert about `package.json` / `.ts` sources belong in the vitest suit
 - `.env` is for secrets only; behavioral settings go in `config.yaml`.
 - Squash-merging a stale branch silently reverts recent upstream fixes — rebase first.
 - Shared skills index: `~/repos/claude-config/skills/SKILLS_INDEX.json`.
+
+## Navigating the code — use graft before grep
+
+The repo is indexed by graft (a symbol/call graph with exact `file:line` spans). The index lives
+in `graft/` (gitignored — run `graft build` once per clone; `graft build --deep` adds LLM
+summaries). `run_agent.py` (~12k LOC) and `cli.py` (~11k LOC) are too large to read whole; ask
+the graph instead:
+
+```bash
+graft ask "how does X work" --source     # ranked hits with code inlined
+graft callers <Symbol.or.method>          # blast radius before a rename
+graft grep "<literal>"                    # every occurrence, indexed files
+```
+
+In Claude Code the same graph is exposed as the `mcp__graft__*` tools (load all five in one
+ToolSearch). Results reflect uncommitted edits.
