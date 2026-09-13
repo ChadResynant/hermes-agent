@@ -111,3 +111,14 @@ graft grep "<literal>"                    # every occurrence, indexed files
 
 In Claude Code the same graph is exposed as the `mcp__graft__*` tools (load all five in one
 ToolSearch). Results reflect uncommitted edits.
+
+## Local inference (Macadoo)
+
+Hermes runs on the Sep 7, 2026 ruled path: Ollama alias `resy-qwen3.6:latest` (64K context,
+tools) at `http://127.0.0.1:11434/v1` — provider `resy-ollama` in `~/.hermes/config.yaml`.
+The 18088 gateway (`resy-gateway`) is chat-only for Hermes: `coder` emits tool calls as text and
+`reasoner` is always grounded (tools blocked). Fleet skills are mounted under
+`~/.hermes/skills/resynant/` with `skills.compact_categories: [resynant]`; keep CLI toolsets
+lean and `max_tokens` small — a 32k local window has ~9k spare after the base prompt. If the
+alias disappears (CCN restart evicts it), Chad re-runs
+`~/repos/llm/scripts/handoff_create_resy_qwen36_alias.sh --apply`.
