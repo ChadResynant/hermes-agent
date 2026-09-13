@@ -659,9 +659,36 @@ def coding_compact_skill_categories(
     loadable via ``skill_view`` / ``skills_list``; only descriptions are
     dropped.
     """
-    return resolve_runtime_mode(
+    posture = resolve_runtime_mode(
         platform=platform, cwd=cwd, config=config
     ).compact_skill_categories()
+    return posture | _configured_compact_skill_categories(config)
+
+
+def _configured_compact_skill_categories(
+    config: Optional[dict[str, Any]],
+) -> frozenset[str]:
+    """``skills.compact_categories`` from config.yaml — always names-only.
+
+    Independent of posture and focus mode: an operator who mounts a large
+    shared skill library (hundreds of entries under one category) opts that
+    category into the names-only line so the index does not dominate the
+    system prompt. Same demote-never-hide contract as focus mode.
+    """
+    if config is None:
+        try:
+            from hermes_cli.config import load_config
+
+            config = load_config()
+        except Exception:
+            return frozenset()
+    skills_cfg = config.get("skills") if isinstance(config, dict) else None
+    raw = skills_cfg.get("compact_categories") if isinstance(skills_cfg, dict) else None
+    if isinstance(raw, str):
+        raw = [raw]
+    if not isinstance(raw, (list, tuple)):
+        return frozenset()
+    return frozenset(str(c).strip() for c in raw if isinstance(c, str) and c.strip())
 
 
 def _enabled_mcp_servers(config: Optional[dict[str, Any]]) -> list[str]:
