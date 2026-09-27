@@ -226,5 +226,5 @@ native/fts5_cjk/*.so
 # Disposable profile created by scripts/probe_active_session_exclusivity.py
 .probe-home/
 
-# graft local graph cache — regenerable (`graft build`), not committed.
+# Graft map cache — generated and published by Chad; contributors fetch a validated map.
 /graft/
