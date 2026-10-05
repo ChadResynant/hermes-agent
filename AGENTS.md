@@ -28,13 +28,14 @@ If you are Codex (or any agent that does not auto-load `CLAUDE.md`):
 <!-- GOVERNANCE-PREFLIGHT-v1 -->
 ## Governance Pre-Flight (summary — binding rules live in governance/)
 
-Interactive Codex sessions use lightweight startup by default: no workspace audit or PHASE 0.5
-restatement before the task is known. `codex --full-context` restores both. Other launchers retain
-their configured startup behavior.
-
-After task scope is known:
-- Load only the relevant repo instructions and governance contracts.
+All agents — Claude, Codex, Grok, Gemini, Hermes — before starting a task:
+- Follow the task-scoped startup and pre-flight requirements in the linked Agent Interaction
+  Policy. Scale the plan and cited policies to the task; do not force a fixed number of steps or
+  policies. Lightweight Codex work does not imply a full-context audit.
 - Use the **canonical document template** for any document — do not invent a format.
+- Before reporting completion, run
+  `~/repos/repos-config/scripts/branch_worktree_lifecycle_gate.py --root ~/repos`; the binding
+  cleanup-debt invariant is `~/repos/governance/AGENTS.md#universal-branchworktree-lifecycle-invariant`.
 
 **AGENTS NEVER SEND (absolute order).** No email, calendar invitation, meeting update or
 cancellation, or message of any kind — to a customer or to **anyone else**. **A calendar invite
@@ -46,9 +47,92 @@ communications**, Chad transmits or delegates the rest.
 This is a summary; the binding rules and full checklists live in governance (source of truth):
 - `~/repos/governance/policies/AGENT_INTERACTION_POLICY.md` — startup sequence + PHASE 0.5,
   and §"External Communication and Representation — Agents Do Not Transmit"
+- `~/repos/claude-config/skills/prepare-cad-drawing/SKILL.md` and
+  `~/repos/governance/contracts/CAD_EXPORT_FORMATS_CONTRACT.md` — engineering drawing and print
+  exports, including required project/batch/date/revision/source-SHA/input-digest traceability.
 - `~/repos/governance/standards/DOCUMENT_TEMPLATE_REGISTRY.md` — which template to use
 - `~/repos/governance/INDEX.md` — master registry of all contracts, policies, gates
 <!-- /GOVERNANCE-PREFLIGHT-v1 -->
+
+<!-- EXECUTIVE-BREVITY-PROJECTION:BEGIN -->
+## Executive Brevity Standard (generated; do not edit)
+
+Canonical source: `governance/policies/AGENT_INTERACTION_POLICY.md#executive-brevity-standard-ebs-1`
+
+Canonical SHA-256: `ac12a3f7444ce04b5de1c0a6bf78987eedf9e1c744c66deb12c80ac7691fe077`
+
+Apply the exact canonical policy carried in this generated projection:
+
+```json
+{
+  "schema": "resynant.executive_brevity.projection@1",
+  "source": "governance/policies/AGENT_INTERACTION_POLICY.md#executive-brevity-standard-ebs-1",
+  "canonical_sha256": "ac12a3f7444ce04b5de1c0a6bf78987eedf9e1c744c66deb12c80ac7691fe077",
+  "policy": {
+    "schema": "resynant.executive_brevity@1",
+    "applies_to": [
+      "claude",
+      "codex",
+      "grok",
+      "antigravity",
+      "hermes",
+      "resy",
+      "local-model",
+      "botresynant",
+      "orchestrator",
+      "subagent",
+      "future-agent-installation"
+    ],
+    "default": {
+      "max_interactive_words": 300,
+      "lead_with": [
+        "decision",
+        "verdict",
+        "current_status"
+      ],
+      "report_only": [
+        "blockers",
+        "material_risks",
+        "decisions_required",
+        "next_action"
+      ],
+      "required_no_blockers_phrase": "No blockers. Proceed.",
+      "default_sections": [
+        "STATUS",
+        "BLOCKERS",
+        "DECISION NEEDED",
+        "NEXT ACTION"
+      ],
+      "tables": "essential_only",
+      "detail_storage": "durable_artifact",
+      "internal_analysis_visibility": "does_not_expand_user_report"
+    },
+    "do_not_restate": [
+      "accepted_architecture",
+      "history",
+      "accepted_evidence",
+      "accepted_rationale",
+      "prior_findings"
+    ],
+    "review_cycle_allowed_only_for": [
+      "concrete_contradiction",
+      "failed_invariant",
+      "security_defect",
+      "explicit_human_request"
+    ],
+    "detail_override_phrases": [
+      "full report",
+      "detailed analysis",
+      "deep review"
+    ],
+    "detail_override_equivalents_allowed": true,
+    "detail_override_scope": "current_task_only",
+    "violation_class": "reporting_quality_defect",
+    "work_validity_effect": "none"
+  }
+}
+```
+<!-- EXECUTIVE-BREVITY-PROJECTION:END -->
 
 Instructions for AI coding assistants and developers working on the hermes-agent codebase.
 This root file holds only what applies everywhere. Each area has its own `AGENTS.md` (aim for
