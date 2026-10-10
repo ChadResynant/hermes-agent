@@ -182,19 +182,24 @@ Tests that assert about `package.json` / `.ts` sources belong in the vitest suit
 
 ## Navigating the code — use graft before grep
 
-The repo is indexed by graft (a symbol/call graph with exact `file:line` spans). The index lives
-in `graft/` (gitignored — run `graft build` once per clone; `graft build --deep` adds LLM
-summaries). `run_agent.py` (~12k LOC) and `cli.py` (~11k LOC) are too large to read whole; ask
-the graph instead:
+`graft/` is a generated, gitignored cache. Follow the binding [Graft Map Policy](~/repos/governance/policies/GRAFT_MAP_POLICY.md).
+Before using a map, fetch the validated published copy with
+`bash ~/repos/claude-config/scripts/graft_fetch_map.sh hermes-agent [harpy-user]`.
+The fetcher checks clean-main provenance and the wiring digest. Compare `graft/PROVENANCE.json`'s
+source commit with this repo's `HEAD`. If the source-change gap exceeds the agreed freshness threshold,
+read affected source directly; if the commit or threshold is unknown, report unknown freshness
+and read affected source directly. A map with missing or dirty provenance is invalid, and no
+valid published map means use source directly. Contributors must not run `graft build` or
+otherwise refresh maps. Use read-only queries with `--no-refresh` where supported:
 
 ```bash
-graft ask "how does X work" --source     # ranked hits with code inlined
-graft callers <Symbol.or.method>          # blast radius before a rename
-graft grep "<literal>"                    # every occurrence, indexed files
+graft ask "how does X work" --source --no-refresh
+graft callers <Symbol.or.method> --no-refresh
+graft grep "<literal>" --no-refresh
 ```
 
 In Claude Code the same graph is exposed as the `mcp__graft__*` tools (load all five in one
-ToolSearch). Results reflect uncommitted edits.
+ToolSearch); use a read-only surface after the same provenance and freshness checks.
 
 ## Local inference (Macadoo)
 
