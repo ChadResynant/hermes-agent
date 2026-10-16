@@ -63,6 +63,11 @@ Canonical source: `governance/policies/AGENT_INTERACTION_POLICY.md#executive-bre
 
 Canonical SHA-256: `ac12a3f7444ce04b5de1c0a6bf78987eedf9e1c744c66deb12c80ac7691fe077`
 
+Precedence (same policy, after the JSON block): WF-1 supersedes `default_sections` and
+`required_no_blockers_phrase` for direct answers and ordinary completion receipts (at most
+five lines); EA-1 governs executive summaries. Those two keys carry no mandatory effect, and
+a later explicit instruction from Chad supersedes both.
+
 Apply the exact canonical policy carried in this generated projection:
 
 ```json
